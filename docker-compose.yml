@@ -44,6 +44,36 @@ services:
       - azurite
       - placement
     network_mode: "service:python_app" # Attach the python_app-dapr service to the python_app network namespace
+  node_app:
+    build: ./nodejs
+    volumes:
+      - ./nodejs:/usr/src/app
+    ports:
+      - "3000:3000"
+    networks:
+      - dapr_template
+    depends_on:
+      - azurite
+      - placement
+  node_app_dapr:
+    image: "daprio/daprd:edge"
+    command: [
+        "./daprd",
+        "--app-id",
+        "node_app",
+        "--app-port",
+        "3000",
+        "--placement-host-address",
+        "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
+        "--resources-path",
+        "./components",
+      ]
+    volumes:
+      - "./dapr-components/:/components" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+    depends_on:
+      - azurite
+      - placement
+    network_mode: "service:node_app"
   placement:
     image: "daprio/dapr"
     command: ["./placement", "--port", "50006"]
