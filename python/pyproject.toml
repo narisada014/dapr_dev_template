@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "dapr_template"
+version = "0.1.0"
+description = ""
+authors = ["Reishi Narisada <nari.reishi.dev@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.68.2"
+uvicorn = "^0.15.0"
+dapr = "^1.4.0"
+pydantic = "^1.10.7"
+cloudevents = "^1.9.0"
+dapr-ext-grpc = "^1.9.1"
+dapr-ext-fastapi = "^1.9.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

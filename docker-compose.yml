@@ -1,0 +1,54 @@
+version: "3.9"
+services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    hostname: azurite
+    restart: always
+    command: "azurite --blobHost 0.0.0.0 --blobPort 10000 --queueHost 0.0.0.0 --queuePort 10001"
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+    volumes:
+      - ./data:/data
+    networks:
+      - dapr_template
+    environment:
+      - TZ=Asia/Tokyo
+  python_app:
+    build: ./python
+    volumes:
+      - ./python:/app/
+    ports:
+      - "8000:8000"
+    networks:
+      - dapr_template
+    depends_on:
+      - azurite
+      - placement
+  python_app_dapr:
+    image: "daprio/daprd:edge"
+    command: [
+        "./daprd",
+        "--app-id",
+        "python_app",
+        "--app-port",
+        "8000",
+        "--placement-host-address",
+        "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
+        "--resources-path",
+        "./components",
+      ]
+    volumes:
+      - "./dapr-components/:/components" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+    depends_on:
+      - azurite
+      - placement
+    network_mode: "service:python_app" # Attach the python_app-dapr service to the python_app network namespace
+  placement:
+    image: "daprio/dapr"
+    command: ["./placement", "--port", "50006"]
+    ports:
+      - "50006:50006"
+networks:
+  dapr_template:
+    external: true

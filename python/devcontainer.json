@@ -1,0 +1,8 @@
+{
+  "name": "Python App",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "python_app",
+  "workspaceFolder": "/app",
+  "settings": { "terminal.integrated.shell.linux": null },
+  "extensions": ["ms-python.python"]
+}

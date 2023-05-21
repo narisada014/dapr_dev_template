@@ -1,0 +1,21 @@
+# ref: https://learn.microsoft.com/ja-jp/azure/storage/common/storage-use-azurite?tabs=visual-studio
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: queueStoragePubSub
+  namespace: default
+spec:
+  type: bindings.azure.storagequeues
+  version: v1
+  metadata:
+    - name: accountName
+      value: devstoreaccount1
+    - name: queueName
+      value: myqueue
+    # azurite development mode key. This is public information. please see above ref.
+    - name: accountKey
+      value: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+    - name: endpoint
+      value: http://azurite:10001 # portはdocker-composeでazurite実行時に指定している
+    - name: ttlInSeconds
+      value: 10800 # 3 hours

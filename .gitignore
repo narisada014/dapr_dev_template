@@ -1,0 +1,4 @@
+__azurite*
+__blobstorage*
+**/__pycache__*
+data
