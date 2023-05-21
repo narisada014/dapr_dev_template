@@ -2,3 +2,5 @@ __azurite*
 __blobstorage*
 **/__pycache__*
 data
+**/node_modules*
+**/dist*
