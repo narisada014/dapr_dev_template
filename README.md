@@ -27,3 +27,9 @@ Perform "Attaching to a running container" and carry out development within the 
 ```
 $ npm install -g azure-functions-core-tools@3 --unsafe-perm true
 ```
+
+# TODO
+
+- add Node.js dev environment
+- add Azure Function Trigger on local
+- add pubsub using Azure Service Bus
