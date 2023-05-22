@@ -42,11 +42,11 @@ pydanticを使用すると、キューがdaprによって取得された際に�
 """
 @app.post("/queueStoragePubSub")
 async def dequeue(request: Request):
-    print("キューを取得します")
-    request_body = await request.json()
+    print("get queue message")
+    request_body: Message = await request.json()
     content = request_body.get("content")
-    if content.get("type") != "simple_message":
-        print("typeがsimple_messageではないので処理を終了します")
+    if content is None or content.get("type") != "simple_message":
+        print("type is not simple_message so return")
     try:
         print(request_body)
     except Exception as e:
@@ -55,7 +55,6 @@ async def dequeue(request: Request):
 """
 Azure blob Storageを使用した例
 ファイルをアップロードし、それが完了するとqueueにファイル名の入った通知メッセージを送る
-WIP
 """
 @app.post("/upload")
 async def upload():
@@ -77,11 +76,11 @@ async def upload():
 
 @app.post("/blobURLPubSub")
 async def blob_url_pubsub(request: Request):
-    print("blobキューを取得します")
-    request_body = await request.json()
+    print("get blob queue message!!")
+    request_body: Message = await request.json()
     content = request_body.get("content")
-    if content.get("type") != "blob_url":
-        print("typeがblob_urlではないので処理を終了します")
+    if content is None or content.get("type") != "blob_url":
+        print("type is not blob_url so return")
     try:
         print(request_body)
     except Exception as e:

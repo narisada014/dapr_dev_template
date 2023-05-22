@@ -33,3 +33,4 @@ $ npm install -g azure-functions-core-tools@3 --unsafe-perm true
 - add Node.js dev environment
 - add Azure Function Trigger on local
 - add pubsub using Azure Service Bus
+  - ref: https://jimmybogard.com/local-development-with-azure-service-bus/
