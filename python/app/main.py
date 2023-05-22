@@ -47,6 +47,7 @@ async def dequeue(request: Request):
     content = request_body.get("content")
     if content is None or content.get("type") != "simple_message":
         print("type is not simple_message so return")
+        return
     try:
         print(request_body)
     except Exception as e:
@@ -81,6 +82,7 @@ async def blob_url_pubsub(request: Request):
     content = request_body.get("content")
     if content is None or content.get("type") != "blob_url":
         print("type is not blob_url so return")
+        return
     try:
         print(request_body)
     except Exception as e:
