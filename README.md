@@ -34,3 +34,9 @@ $ npm install -g azure-functions-core-tools@3 --unsafe-perm true
 - add Azure Function Trigger on local
 - add pubsub using Azure Service Bus
   - ref: https://jimmybogard.com/local-development-with-azure-service-bus/
+
+### Watch
+
+issue about using Elasticsearch through dapr
+
+- https://github.com/dapr/components-contrib/issues/2826
