@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from dapr.clients import DaprClient
 from dapr.ext.fastapi import DaprApp
 from pydantic import BaseModel
@@ -19,27 +19,71 @@ def read_root():
 Azure Storage Queueを使用したPub/Sub
 dequeueのメソッドをdaprと紐付けてやることでキューがenqueueされた時に呼び出される
 """
-@app.post("/queueStoragePubSub")
-async def dequeue(msg: Message):
-    print("キューを取得します")
-    try:
-        print(msg)
-    except Exception as e:
-        raise e
-
 @app.post("/enqueue_message")
 async def enqueue(message: Message):
     print(message)
     try:
         content = message.content
-        dapr_client.invoke_binding(binding_name='queueStoragePubSub', operation='create', data=json.dumps({"content": content}))
+        message = {
+            "message": content,
+            "type": "simple_message"
+        }
+        dapr_client.invoke_binding(binding_name='queueStoragePubSub', operation='create', data=json.dumps({"content": message}))
         return message
     except Exception as e:
         raise e
 
 """
+pydanticを使用すると、キューがdaprによって取得された際にバリデーションがかけられてしまう。具体的には以下の挙動が起こり健全ではない
+- queue1
+- queue2
+二つのキューが存在する場合に、バインディングを使用したエンドポイントを用意するとqueue1にエンキューされた時にqueue2のバインディングもdaprに呼び出される仕組みのようである。
+キューはバインディングしたAPIで処理されているので問題ないが、空のリクエストがもう片方のqueue2のバインディングに行われ、422が発生していた。
+"""
+@app.post("/queueStoragePubSub")
+async def dequeue(request: Request):
+    print("キューを取得します")
+    request_body = await request.json()
+    content = request_body.get("content")
+    if content.get("type") != "simple_message":
+        print("typeがsimple_messageではないので処理を終了します")
+    try:
+        print(request_body)
+    except Exception as e:
+        raise e
+
+"""
 Azure blob Storageを使用した例
-ファイルがアップロードされると、blobStorageBindingのメソッドが呼び出される
+ファイルをアップロードし、それが完了するとqueueにファイル名の入った通知メッセージを送る
 WIP
 """
+@app.post("/upload")
+async def upload():
+    try:
+        # ファイルをアップロードする
+        file_name = "IMG_7413.jpeg"
+        with open(file_name, "rb") as f:
+            res = dapr_client.invoke_binding(binding_name='blob', operation='create', data=f.read())
+            blobURL = res.json().get("blobURL")
+            if blobURL is None:
+                raise Exception("blobURL is None")
+            message = {
+                "message": blobURL,
+                "type": "blob_url"
+            }
+            dapr_client.invoke_binding(binding_name='blobURLPubSub', operation='create', data=json.dumps({"content": message}))
+    except Exception as e:
+        raise e
+
+@app.post("/blobURLPubSub")
+async def blob_url_pubsub(request: Request):
+    print("blobキューを取得します")
+    request_body = await request.json()
+    content = request_body.get("content")
+    if content.get("type") != "blob_url":
+        print("typeがblob_urlではないので処理を終了します")
+    try:
+        print(request_body)
+    except Exception as e:
+        raise e
 
