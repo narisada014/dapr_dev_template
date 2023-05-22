@@ -35,6 +35,7 @@ $ npm install -g azure-functions-core-tools@3 --unsafe-perm true
   - ref: https://medium.com/cloudfordummies/local-azure-storage-emulation-with-azurite-and-azure-functions-a-dummies-guide-53949f0c1f44
 - add pubsub using Azure Service Bus
   - ref: https://jimmybogard.com/local-development-with-azure-service-bus/
+- add Github Actions
 
 ### Watch
 
