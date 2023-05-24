@@ -6,6 +6,10 @@ create by this command
 
 ```
 $ pulumi new azure-typescript
+$ pulumi stack init dev
+pulumi config set azure-native:location japaneast
+$ pulumi stack select dev
+$ pulumi up --yes
 ```
 
 # Register python_app container
