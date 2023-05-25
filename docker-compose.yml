@@ -13,6 +13,8 @@ services:
     networks:
       - dapr_template
     environment:
+      # ref: https://github.com/Azure/Azurite/issues/1615#issuecomment-1196332300
+      - AZURITE_ACCOUNTS=devstoreaccount1:Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
       - TZ=Asia/Tokyo
   python_app:
     build: ./python
@@ -26,7 +28,7 @@ services:
       - azurite
       - placement
   python_app_dapr:
-    image: "daprio/daprd"
+    image: "daprio/daprd:edge"
     command: [
         "./daprd",
         "--app-id",
@@ -41,8 +43,7 @@ services:
     volumes:
       - "./dapr-components/:/components" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
     depends_on:
-      - azurite
-      - placement
+      - python_app
     network_mode: "service:python_app" # Attach the python_app-dapr service to the python_app network namespace
   node_app:
     build: ./nodejs
@@ -56,7 +57,7 @@ services:
       - azurite
       - placement
   node_app_dapr:
-    image: "daprio/daprd"
+    image: "daprio/daprd:edge"
     command: [
         "./daprd",
         "--app-id",
@@ -71,11 +72,10 @@ services:
     volumes:
       - "./dapr-components/:/components" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
     depends_on:
-      - azurite
-      - placement
+      - node_app
     network_mode: "service:node_app"
   placement:
-    image: "daprio/dapr"
+    image: "daprio/dapr:edge"
     command: ["./placement", "--port", "50006"]
     ports:
       - "50006:50006"
