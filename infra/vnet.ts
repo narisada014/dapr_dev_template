@@ -6,6 +6,10 @@ export const virtualNetwork = new azure.network.VirtualNetwork("sampleDaprVNet",
         addressPrefixes: ["10.0.0.0/16"],
     },
     subnets: [{
+        // this setting refer to this error: 
+        // Code="ManagedEnvironmentInvalidNetworkConfiguration" 
+        // Message="The environment network configuration is invalid: Provided subnet must have a size of at least /23"
+        // これは、Azure Container Appsの制約で、サブネットのサイズは/23以上である必要があることを示している
         addressPrefix: "10.0.0.0/23",
         name: "sample-dapr-subnet-1",
     }],
