@@ -4,3 +4,4 @@ __blobstorage*
 data
 **/node_modules*
 **/dist*
+**/arm-template.json
