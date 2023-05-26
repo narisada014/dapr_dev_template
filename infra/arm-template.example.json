@@ -1,0 +1,29 @@
+{
+    "location": "Japan East",
+    "name": "my-sample-job",
+    "properties": {
+        "configuration": {
+            "scheduleTriggerConfig": {
+                "cronExpression": "0 0 * * *",
+                "parallelism": 1,
+                "replicaCompletionCount": 1
+            },
+            "replicaRetryLimit": 1,
+            "replicaTimeout": 60,
+            "triggerType": "Schedule"
+        },
+        "environmentId": "/subscriptions/<subscription_id>/resourceGroups/my-resource-group/providers/Microsoft.App/managedEnvironments/my-environment",
+        "template": {
+            "containers": [
+                {
+                    "image": "mcr.microsoft.com/k8se/quickstart-jobs:latest",
+                    "name": "main",
+                    "resources": {
+                        "cpu": 0.25,
+                        "memory": "0.5Gi"
+                    }
+                }
+            ]
+        }
+    }
+}
