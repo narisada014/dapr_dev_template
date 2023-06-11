@@ -68,6 +68,12 @@ export const elizaApi = createApi({
             req: req,
           })
         },
+        transformResponse: (response: SayResponse) => {
+          // シリアライズ可能なデータに変換する必要がある
+          return {
+            sentence: response.sentence,
+          }
+        }
       }),
     }),
 })
