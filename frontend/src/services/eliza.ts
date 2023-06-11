@@ -50,32 +50,31 @@ export const connectGrpcBaseQuery: BaseQueryFn<
   }
 }
 
+// 一文字目だけ小文字にする
+const decapitalize = (str: string) => {
+  return str.charAt(0).toLowerCase() + str.slice(1);
+}
+
 export const elizaApi = createApi({
   reducerPath: "elizaApi",
   baseQuery: connectGrpcBaseQuery,
   endpoints: (builder) => ({
-      helloEliza: builder.query<{
-        sentence: string
-      }, {
-        sentence: string
-      }>({
-        query: (message) => {
-          const req = new SayRequest()
-          req.sentence = message.sentence
-          return ({
-            service: ElizaService,
-            method: "say",
-            req: req,
-          })
-        },
-        transformResponse: (response: SayResponse) => {
-          // シリアライズ可能なデータに変換する必要がある
-          return {
-            sentence: response.sentence,
-          }
-        }
-      }),
+    helloEliza: builder.query<string, string>({
+      query: (message) => {
+        const req = new SayRequest()
+        req.sentence = message
+        return ({
+          service: ElizaService,
+          method: decapitalize(ElizaService.methods.say.name),
+          req: req,
+        })
+      },
+      transformResponse: (response: SayResponse) => {
+        // シリアライズ可能なデータに変換する必要がある
+        return response.sentence
+      }
     }),
+  }),
 })
 
 export const { useHelloElizaQuery } = elizaApi

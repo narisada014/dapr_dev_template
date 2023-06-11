@@ -19,7 +19,7 @@ export const Counter: React.FC = () => {
 
   const incrementValue = Number(incrementAmount) || 0
 
-  const {data, isLoading} = useHelloElizaQuery({sentence: 'Hello Eliza!'})
+  const {data, isLoading} = useHelloElizaQuery('Hello Eliza!')
   console.log(data)
 
   return (
