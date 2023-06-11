@@ -10,13 +10,16 @@ import {
   selectCount,
 } from "./counterSlice"
 import styles from "./Counter.module.css"
+import { useHelloElizaQuery } from "../../services/eliza"
 
-export function Counter() {
+export const Counter: React.FC = () => {
   const count = useAppSelector(selectCount)
   const dispatch = useAppDispatch()
   const [incrementAmount, setIncrementAmount] = useState("2")
 
   const incrementValue = Number(incrementAmount) || 0
+
+  const {data, isLoading} = useHelloElizaQuery({sentence: 'Hello Eliza!'})
 
   return (
     <div>
