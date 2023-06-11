@@ -51,29 +51,25 @@ export const connectGrpcBaseQuery: BaseQueryFn<
 }
 
 export const elizaApi = createApi({
-    reducerPath: "elizaApi",
-    baseQuery: connectGrpcBaseQuery,
-    endpoints: (builder) => ({
-        helloEliza: builder.query<{
-          sentence: string
-        }, {
-          sentence: string
-        }>({
-          query: (message) => {
-            const req = new SayRequest()
-            req.sentence = message.sentence
-            return ({
-              service: ElizaService,
-              method: "say",
-              req: req,
-            })
-          },
-          transformResponse: (response: SayResponse) => {
-            console.log(response)
-            return response
-          }
-        }),
+  reducerPath: "elizaApi",
+  baseQuery: connectGrpcBaseQuery,
+  endpoints: (builder) => ({
+      helloEliza: builder.query<{
+        sentence: string
+      }, {
+        sentence: string
+      }>({
+        query: (message) => {
+          const req = new SayRequest()
+          req.sentence = message.sentence
+          return ({
+            service: ElizaService,
+            method: "say",
+            req: req,
+          })
+        },
       }),
+    }),
 })
 
 export const { useHelloElizaQuery } = elizaApi
