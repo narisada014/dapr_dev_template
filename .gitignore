@@ -5,3 +5,13 @@ data
 **/node_modules*
 **/dist*
 **/arm-template.json
+
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
