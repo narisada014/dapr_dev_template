@@ -3,8 +3,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { SayRequest, SayResponse } from "./eliza_pb.js";
-import { MethodKind } from "@bufbuild/protobuf";
+import { SayRequest, SayResponse } from "./eliza_pb.js"
+import { MethodKind } from "@bufbuild/protobuf"
 
 /**
  * @generated from service buf.connect.demo.eliza.v1.ElizaService
@@ -30,6 +30,5 @@ export const ElizaService = {
       O: SayResponse,
       kind: MethodKind.Unary,
     },
-  }
-} as const;
-
+  },
+} as const

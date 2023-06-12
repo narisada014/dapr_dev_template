@@ -1,8 +1,6 @@
 import { useMemo } from "react"
 import { ServiceType } from "@bufbuild/protobuf"
-import {
-  createConnectTransport
-} from "@bufbuild/connect-web"
+import { createConnectTransport } from "@bufbuild/connect-web"
 import { PromiseClient, createPromiseClient } from "@bufbuild/connect"
 
 const transport = createConnectTransport({
@@ -10,6 +8,6 @@ const transport = createConnectTransport({
 })
 
 export const client = <T extends ServiceType>(service: T): PromiseClient<T> => {
-  console.log('useCLient', service)
+  console.log("useCLient", service)
   return createPromiseClient(service, transport)
 }
