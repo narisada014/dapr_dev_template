@@ -73,6 +73,14 @@ resource "azapi_resource" "container_app_environment" {
       }
     }
   })
+  // azapiのoutputをterraformのoutputに渡す方法
+  // portalでjsonのキーを確認し、outputするオブジェクトを指定する
+  response_export_values = ["properties.staticIp"]
+}
+
+// response_export_valuesで指定したキーをoutputする
+output "dapr_env_static_ip" {
+  value = jsondecode(azapi_resource.container_app_environment.output).properties.staticIp
 }
 
 resource "azurerm_container_app" "dapr_template_container_app" {
