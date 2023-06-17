@@ -1,5 +1,22 @@
 version: "3.9"
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: db
+    restart: always
+    volumes:
+      - db-store:/var/lib/mysql
+      - ./logs:/var/log/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - TZ=${TZ}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 13306:3306
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     hostname: azurite
@@ -56,6 +73,7 @@ services:
     depends_on:
       - azurite
       - placement
+      - mysql
   node_app_dapr:
     image: "daprio/daprd:edge"
     command: [
@@ -82,3 +100,5 @@ services:
 networks:
   dapr_template:
     external: true
+volumes:
+  db-store:
