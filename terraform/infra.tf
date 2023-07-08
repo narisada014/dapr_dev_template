@@ -124,14 +124,14 @@ resource "azurerm_container_app" "dapr_template_container_app" {
     name  = "sample-dapr-template-secret"
     value = azurerm_container_registry.dapr_template_acr.admin_password
   }
-  depends_on = [null_resource.docker_build]
+  # depends_on = [null_resource.docker_build]
 }
 
-resource "null_resource" "docker_build" {
-  provisioner "local-exec" {
-    command = "cd .. && cd python && docker build --platform=linux/amd64 -t template_python_app . && docker tag template_python_app daprtemplateacr.azurecr.io/python_app:latest && docker push daprtemplateacr.azurecr.io/python_app:latest"
-  }
-  triggers = {
-    always_run = "${timestamp()}"
-  }
-}
+# resource "null_resource" "docker_build" {
+#   provisioner "local-exec" {
+#     command = "cd .. && cd python && docker build --platform=linux/amd64 -t template_python_app . && docker tag template_python_app daprtemplateacr.azurecr.io/python_app:latest && docker push daprtemplateacr.azurecr.io/python_app:latest"
+#   }
+#   triggers = {
+#     always_run = "${timestamp()}"
+#   }
+# }

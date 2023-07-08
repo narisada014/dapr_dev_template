@@ -17,3 +17,4 @@ data
 *.tfvars
 **/.env
 **/logs
+.github_actions.sh
