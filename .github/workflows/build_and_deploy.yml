@@ -1,0 +1,35 @@
+name: Build Deploy Dev
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: [main]
+
+  # Allow mannually trigger
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.CADAPRTEMPLATE_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }}
+          registryUrl: daprtemplateacr.azurecr.io
+          registryUsername: ${{ secrets.CADAPRTEMPLATE_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.CADAPRTEMPLATE_REGISTRY_PASSWORD }}
+          containerAppName: ca-dapr-template
+          resourceGroup: rg-dapr-template
+          imageToBuild: daprtemplateacr.azurecr.io/python_app/latest:${{ github.sha }}
+          dockerfilePath: ./python/Dockerfile
