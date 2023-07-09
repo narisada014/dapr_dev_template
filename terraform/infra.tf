@@ -16,6 +16,17 @@ provider "azurerm" {
 provider "azapi" {
 }
 
+variable "deploy_secret_name" {
+  default     = ""
+  type        = string
+}
+
+variable "deploy_secret_value" {
+  description = ""
+  default     = ""
+  type        = string
+}
+
 resource "azurerm_resource_group" "dapr_template" {
   name     = "rg-dapr-template"
   location = "japaneast"
@@ -97,7 +108,7 @@ resource "azurerm_container_app" "dapr_template_container_app" {
   template {
     container {
       name   = "dapr-template-python"
-      image  = join("/", [azurerm_container_registry.dapr_template_acr.login_server, "python_app:latest"])
+      image  = join("/", [azurerm_container_registry.dapr_template_acr.login_server, "python_app"])
       cpu    = "0.25"
       memory = "0.5Gi"
       env {
@@ -123,6 +134,10 @@ resource "azurerm_container_app" "dapr_template_container_app" {
   secret {
     name  = "sample-dapr-template-secret"
     value = azurerm_container_registry.dapr_template_acr.admin_password
+  }
+  secret {
+    name = var.deploy_secret_name
+    value = var.deploy_secret_value
   }
   # depends_on = [null_resource.docker_build]
 }
