@@ -31,5 +31,5 @@ jobs:
           registryPassword: ${{ secrets.CADAPRTEMPLATE_REGISTRY_PASSWORD }}
           containerAppName: ca-dapr-template
           resourceGroup: rg-dapr-template
-          imageToBuild: daprtemplateacr.azurecr.io/python_app:${{ github.sha }}
+          imageToBuild: daprtemplateacr.azurecr.io/python_app:latest
           dockerfilePath: ./python/Dockerfile.prod
